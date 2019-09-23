@@ -17,7 +17,7 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: linux-release-candidate
-        path: linux-artifacts
+        path: linux/artifacts
 
   windows:
 
@@ -63,7 +63,7 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: windows-release-candidate
-        path: windows-release-candidate
+        path: windows\windows-release-candidate
 
 # macos:
 
