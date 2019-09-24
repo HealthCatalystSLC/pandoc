@@ -58,7 +58,7 @@ jobs:
           echo Detected version %VERSION%
           echo Creating msi...
           @set WIXBIN="c:\Program Files (x86)\WiX Toolset v3.11\bin"
-          %WIXBIN%\candle -dVERSION=%VERSION% -dBINPATH=. *.wxs -out wixobj\
+          %WIXBIN%\candle -dVERSION=%VERSION% -dBINPATH=%CD% *.wxs -out wixobj\
           if %errorlevel% neq 0 exit /b %errorlevel%
           %WIXBIN%\light  -sw1076 -ext WixUIExtension -ext WixUtilExtension -cultures:en-us -loc Pandoc-en-us.wxl -out pandoc-%VERSION%-windows-x86_64.msi wixobj\*.wixobj
           cd ..
