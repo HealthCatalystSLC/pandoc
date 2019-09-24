@@ -57,6 +57,7 @@ jobs:
           )
           echo Detected version %VERSION%
           echo Creating msi...
+          dir
           @set WIXBIN="c:\Program Files (x86)\WiX Toolset v3.11\bin"
           %WIXBIN%\candle -dVERSION=%VERSION% -dBINPATH=%CD% *.wxs -out wixobj\
           if %errorlevel% neq 0 exit /b %errorlevel%
