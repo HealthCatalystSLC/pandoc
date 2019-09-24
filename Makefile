@@ -63,7 +63,7 @@ packages: checkdocs winpkg debpkg macospkg
 checkdocs: README.md
 	! grep -n -e "\t" MANUAL.txt changelog
 
-debpkg: man/pandoc.1
+debpkg:
 	make -C linux && \
 	cp linux/artifacts/pandoc-$(version)-*.* .
 

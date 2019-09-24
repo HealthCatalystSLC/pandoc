@@ -29,7 +29,7 @@ cp $ARTIFACTS/pandoc $DEST/bin/
 cp $ARTIFACTS/pandoc-citeproc $DEST/bin/
 strip $DEST/bin/pandoc
 strip $DEST/bin/pandoc-citeproc
-cp man/pandoc.1 $DEST/share/man/man1/pandoc.1
+cp $ARTIFACTS/pandoc.1 $DEST/share/man/man1/pandoc.1
 $ARTIFACTS/pandoc-citeproc --man > $DEST/share/man/man1/pandoc-citeproc.1
 gzip -9 $DEST/share/man/man1/pandoc.1
 gzip -9 $DEST/share/man/man1/pandoc-citeproc.1

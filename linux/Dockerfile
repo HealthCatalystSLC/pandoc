@@ -19,5 +19,9 @@ CMD cabal --version && \
     cabal new-build . pandoc-citeproc && \
     cabal new-test -j1 . pandoc-citeproc && \
     for f in $(find dist-newstyle -name 'pandoc*' -type f -perm +400); do cp $f /artifacts/; done && \
+    export VERSION=$(grep '^[Vv]ersion:' pandoc.cabal | awk '{print $$2;}') && \
+   /artifacts/pandoc -f markdown-smart -t man -s \
+     --template man/pandoc.1.template --lua-filter man/manfilter.lua \
+     --variable version="pandoc $(VERSION)" -o /artifacts/pandoc.1 && \
     bash linux/make_deb.sh && \
     bash linux/make_tarball.sh
