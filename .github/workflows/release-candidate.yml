@@ -62,17 +62,17 @@ jobs:
           @set WIXBIN="c:\Program Files (x86)\WiX Toolset v3.11\bin"
           @set WORKDIR=%CD%
           echo Running candle...
-          %WIXBIN%\candle -v -dVERSION=%VERSION% -dBINPATH=%WORKDIR% *.wxs -out wixobj\
+          %WIXBIN%\candle -dVERSION=%VERSION% -dBINPATH=%WORKDIR% *.wxs -out wixobj\
           if %errorlevel% neq 0 exit /b %errorlevel%
           echo Running light...
-          %WIXBIN%\light -v -sw1076 -ext WixUIExtension -ext WixUtilExtension -cultures:en-us -loc Pandoc-en-us.wxl -out %WORKDIR%\pandoc-%VERSION%-windows-x86_64.msi wixobj\*.wixobj
+          %WIXBIN%\light -sw1076 -ext WixUIExtension -ext WixUtilExtension -cultures:en-us -loc Pandoc-en-us.wxl -out %WORKDIR%\pandoc-%VERSION%-windows-x86_64.msi wixobj\*.wixobj
           cd ..
           mkdir windows-release-candidate
           copy windows\pandoc-%VERSION%-windows-x86_64.msi windows-release-candidate
     - uses: actions/upload-artifact@master
       with:
         name: windows-release-candidate
-        path: windows\windows-release-candidate
+        path: windows-release-candidate
 
 # macos:
 
