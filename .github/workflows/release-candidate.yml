@@ -60,9 +60,11 @@ jobs:
           echo Creating msi...
           dir
           @set WIXBIN="c:\Program Files (x86)\WiX Toolset v3.11\bin"
-          %WIXBIN%\candle -dVERSION=%VERSION% -dBINPATH=%CD% *.wxs -out wixobj\
+          echo Running candle...
+          %WIXBIN%\candle -v -dVERSION=%VERSION% -dBINPATH=%CD% *.wxs -out wixobj\
           if %errorlevel% neq 0 exit /b %errorlevel%
-          %WIXBIN%\light  -sw1076 -ext WixUIExtension -ext WixUtilExtension -cultures:en-us -loc Pandoc-en-us.wxl -out pandoc-%VERSION%-windows-x86_64.msi wixobj\*.wixobj
+          echo Running light...
+          %WIXBIN%\light -v -sw1076 -ext WixUIExtension -ext WixUtilExtension -cultures:en-us -loc Pandoc-en-us.wxl -out pandoc-%VERSION%-windows-x86_64.msi wixobj\*.wixobj
           cd ..
           mkdir windows-release-candidate
           copy windows\pandoc-%VERSION%-windows.msi windows-release-candidate
