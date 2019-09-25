@@ -41,7 +41,7 @@ jobs:
       run: |
           for /f %%a in ('powershell -Command "Get-Date -format yyyy-MM-dd"') do set THEDATE=%%a
           stack build pandoc pandoc-citeproc
-          @set WINDOWS=%CD\windows
+          @set WINDOWS=%CD%\windows
           forfiles /P .\.stack-work\install /M pandoc*.exe /S /C "cmd /C echo @path && echo %%WINDOWS%% && copy @path %%WINDOWS%%"
           stack exec pandoc -- -s --toc MANUAL.txt -o windows\MANUAL.html
           stack exec pandoc -- -s COPYING.md -t rtf -o windows\COPYING.rtf
