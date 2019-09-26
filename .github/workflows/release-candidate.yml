@@ -92,6 +92,7 @@ jobs:
       run: |
           export VERSION=$(grep '^[Vv]ersion:' pandoc.cabal | awk '{print $$2;}') && \
           export BASEDIR=$(pwd)
+          export ARTIFACTS=${DIST}/macos-artifacts
           export DIST=${BASEDIR}/macos_package
           export RESOURCES=${DIST}/Resources
           export ROOT=${DIST}/pandoc
@@ -115,13 +116,15 @@ jobs:
           ${DEST}/bin/pandoc -t html5 -s COPYING.md -Vpagetitle=License \
             -o ${RESOURCES}/license.html
           chown -R $ME:staff ${DIST}
+          echo Creating pkg...
+          pkgbuild --root $ROOT --identifier net.johnmacfarlane.pandoc --version $VERSION --ownership recommended ${ARTIFACTS}/pandoc.pkg
           echo Creating zip...
           cd ${DEST}
           cd ..
           mv local ${BASE}
-          zip -r ${DIST}/${BASE}-macOS.zip ${BASE}
+          zip -r ${ARTIFACTS}/${BASE}-macOS.zip ${BASE}
     - uses: actions/upload-artifact@master
       with:
-        name: macos_package
-        path: macos_package
+        name: macos-artifacts
+        path: macos-artifacts
 
