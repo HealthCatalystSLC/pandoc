@@ -36,7 +36,7 @@ jobs:
       run: |
           stack update
           stack build --dependencies-only pandoc pandoc-citeproc
-    - name: Build artifacts
+    - name: Create windows package
       shell: cmd
       run: |
           for /f %%a in ('powershell -Command "Get-Date -format yyyy-MM-dd"') do set THEDATE=%%a
@@ -74,32 +74,54 @@ jobs:
         name: windows-release-candidate
         path: windows-release-candidate
 
-# macos:
+  macos:
 
-#   runs-on: macOS-latest
+    runs-on: macOS-latest
 
-#   steps:
-#   - uses: actions/checkout@v1
-#   - name: Install stack
-#     run: |
-#         curl -L https://get.haskellstack.org/stable/osx-x86_64.tar.gz -o stack.tar.gz
-#         tar xzvf stack.tar.gz --strip-components=1 'stack*/stack'
-#   - name: Install dependencies
-#     run: |
-#         ./stack update
-#         ./stack build --dependencies-only pandoc pandoc-citeproc
-#   - name: Build artifacts
-#     run: |
-#         export ARTIFACTS=nightly-macos/pandoc-nightly-macos-$(date +%Y-%m-%d)
-#         mkdir -p ${ARTIFACTS}
-#         ./stack build pandoc pandoc-citeproc
-#         for f in $(find .stack-work/install -name 'pandoc*' -perm +001 -type f); do cp $f ${ARTIFACTS}/; done
-#         mv ${ARTIFACTS}/pandoc ${ARTIFACTS}/pandoc
-#         mv ${ARTIFACTS}/pandoc-citeproc ${ARTIFACTS}/pandoc-citeproc
-#         cp COPYRIGHT ${ARTIFACTS}/
-#         echo "Built from ${GITHUB_SHA}" > ${ARTIFACTS}/README.nightly.txt
-#   - uses: actions/upload-artifact@master
-#     with:
-#       name: nightly-macos
-#       path: nightly-macos
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install stack
+      run: |
+          curl -L https://get.haskellstack.org/stable/osx-x86_64.tar.gz -o stack.tar.gz
+          tar xzvf stack.tar.gz --strip-components=1 'stack*/stack'
+    - name: Install dependencies
+      run: |
+          ./stack update
+          ./stack build --dependencies-only pandoc pandoc-citeproc
+    - name: Create macOS package
+      run: |
+          export VERSION=$(grep '^[Vv]ersion:' pandoc.cabal | awk '{print $$2;}') && \
+          export BASEDIR=$(pwd)
+          export DIST=${BASEDIR}/macos_package
+          export RESOURCES=${DIST}/Resources
+          export ROOT=${DIST}/pandoc
+          export DEST=${ROOT}/usr/local
+          export ME=$(whoami)
+          export BASE=pandoc-$VERSION
+          mkdir -p ${DIST}
+          mkdir -p ${RESOURCES}
+          mkdir -p ${DEST}/bin
+          mkdir -p ${DEST}/share/man/man1
+          ./stack build pandoc pandoc-citeproc
+          for f in $(find .stack-work/install -name 'pandoc*' -perm +001 -type f); do cp $f ${DEST}/bin/; done
+          strip ${DEST}/bin/pandoc
+          strip ${DEST}/bin/pandoc-citeproc
+          ${DEST}/bin/pandoc -f markdown-smart -t man -s \
+            --template man/pandoc.1.template --lua-filter man/manfilter.lua \
+            --variable version="pandoc $(VERSION)" \
+            -o ${DEST}/share/man/man1/pandoc.1
+          ${DEST}/bin/pandoc-citeproc --man > \
+            $DEST/share/man/man1/pandoc-citeproc.1
+          ${DEST}/bin/pandoc -t html5 -s COPYING.md -Vpagetitle=License \
+            -o ${RESOURCES}/license.html
+          chown -R $ME:staff ${DIST}
+          echo Creating zip...
+          cd ${DEST}
+          cd ..
+          mv local ${BASE}
+          zip -r ${DIST}/${BASE}-macOS.zip ${BASE}
+    - uses: actions/upload-artifact@master
+      with:
+        name: macos_package
+        path: macos_package
 

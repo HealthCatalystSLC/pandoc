@@ -89,8 +89,6 @@ jobs:
           mkdir -p ${ARTIFACTS}
           ./stack build pandoc pandoc-citeproc
           for f in $(find .stack-work/install -name 'pandoc*' -perm +001 -type f); do cp $f ${ARTIFACTS}/; done
-          mv ${ARTIFACTS}/pandoc ${ARTIFACTS}/pandoc
-          mv ${ARTIFACTS}/pandoc-citeproc ${ARTIFACTS}/pandoc-citeproc
           cp COPYRIGHT ${ARTIFACTS}/
           echo "Built from ${GITHUB_SHA}" > ${ARTIFACTS}/README.nightly.txt
     - uses: actions/upload-artifact@master
