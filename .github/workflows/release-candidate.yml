@@ -92,7 +92,7 @@ jobs:
       run: |
           export VERSION=$(grep '^[Vv]ersion:' pandoc.cabal | awk '{print $$2;}')
           export BASEDIR=$(pwd)
-          export ARTIFACTS=${BASEDIR}/macos-artifacts
+          export ARTIFACTS=${BASEDIR}/macos-release-candidate
           export DIST=${BASEDIR}/macos_package
           export RESOURCES=${DIST}/Resources
           export ROOT=${DIST}/pandoc
@@ -126,6 +126,6 @@ jobs:
           zip -r ${ARTIFACTS}/${BASE}-macOS.zip ${BASE}
     - uses: actions/upload-artifact@master
       with:
-        name: macos-artifacts
-        path: macos-artifacts
+        name: macos-release-candidate
+        path: macos-release-candidate
 
