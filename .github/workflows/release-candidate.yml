@@ -99,6 +99,7 @@ jobs:
           export DEST=${ROOT}/usr/local
           export ME=$(whoami)
           export BASE=pandoc-$VERSION
+          mkdir -p ${ARTIFACTS}
           mkdir -p ${DIST}
           mkdir -p ${RESOURCES}
           mkdir -p ${DEST}/bin
