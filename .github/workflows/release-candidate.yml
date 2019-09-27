@@ -126,7 +126,7 @@ jobs:
           cd ..
           mv local ${BASE}
           zip -r ${ARTIFACTS}/${BASE}-macOS.zip ${BASE}
-          echo -e "${BASE}-macOS.pkg: pandoc.pkg\n\tproductbuild --distribution distribution.xml --resources Resources --package-path $< --version ${VERSION} --sign 'Developer ID Installer: John Macfarlane' -o $@\n" > ${ARTIFACTS}/Makefile
+          echo -e "${BASE}-macOS.pkg: pandoc.pkg\n\tproductbuild --distribution distribution.xml --resources Resources --package-path $< --version ${VERSION} --sign 'Developer ID Installer: John Macfarlane' -o \$@\n" > ${ARTIFACTS}/Makefile
     - uses: actions/upload-artifact@master
       with:
         name: macos-release-candidate
