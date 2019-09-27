@@ -126,6 +126,7 @@ jobs:
           cd ..
           mv local ${BASE}
           zip -r ${ARTIFACTS}/${BASE}-macOS.zip ${BASE}
+          chmod -x ${ARTIFACTS}/${BASE}-macOS.zip ${RESOURCES}/license.html ${ARTIFACTS}/distribution.xml
     - uses: actions/upload-artifact@master
       with:
         name: macos-release-candidate
